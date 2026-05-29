@@ -30,28 +30,28 @@ public class AIService {
                 "[feedback]\n\n" +
                 "Resume:\n" + resumeText;
 
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
+        String url = "https://api.groq.com/openai/v1/chat/completions";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(apiKey);
 
-        Map<String, Object> textPart = new HashMap<>();
-        textPart.put("text", prompt);
-
-        Map<String, Object> parts = new HashMap<>();
-        parts.put("parts", List.of(textPart));
+        Map<String, Object> message = new HashMap<>();
+        message.put("role", "user");
+        message.put("content", prompt);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("contents", List.of(parts));
+        body.put("model", "llama-3.3-70b-versatile");
+        body.put("messages", List.of(message));
+        body.put("max_tokens", 1000);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
-        List<Map> candidates = (List<Map>) response.getBody().get("candidates");
-        Map content = (Map) candidates.get(0).get("content");
-        List<Map> resParts = (List<Map>) content.get("parts");
-        return (String) resParts.get(0).get("text");
+        List<Map> choices = (List<Map>) response.getBody().get("choices");
+        Map messageResp = (Map) choices.get(0).get("message");
+        return (String) messageResp.get("content");
     }
 
     public int extractAtsScore(String aiAnalysis) {
