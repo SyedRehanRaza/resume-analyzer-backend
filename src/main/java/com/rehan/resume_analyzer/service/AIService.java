@@ -17,12 +17,17 @@ public class AIService {
     public String analyzeResume(String resumeText) {
 
         String prompt = "You are an expert ATS resume analyzer for Java Developer roles.\n\n" +
-                "Analyze this resume and provide:\n" +
-                "1. ATS Score (out of 100)\n" +
-                "2. Key Strengths (3-4 points)\n" +
-                "3. Skills Gap (missing skills for Java Developer)\n" +
-                "4. Specific Improvements (actionable suggestions)\n" +
-                "5. Overall Feedback\n\n" +
+                "Analyze this resume and provide your response in EXACTLY this format:\n\n" +
+                "ATS Score: [NUMBER]/100\n\n" +
+                "Key Strengths:\n" +
+                "- [point 1]\n" +
+                "- [point 2]\n\n" +
+                "Skills Gap:\n" +
+                "- [missing skill 1]\n\n" +
+                "Improvements:\n" +
+                "- [suggestion 1]\n\n" +
+                "Overall Feedback:\n" +
+                "[feedback]\n\n" +
                 "Resume:\n" + resumeText;
 
         String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
