@@ -35,6 +35,7 @@ public class ResumeController {
 
             // 2. AI se analysis lo
             String aiAnalysis = aiService.analyzeResume(resumeText);
+            System.out.println("AI Response: " + aiAnalysis);
 
             // 3. ATS Score nikalo
             int atsScore = aiService.extractAtsScore(aiAnalysis);
@@ -54,6 +55,8 @@ public class ResumeController {
             response.put("atsScore", atsScore);
             response.put("analysis", aiAnalysis);
             response.put("fileName", file.getOriginalFilename());
+            response.put("aiAnalysis", aiAnalysis);
+            response.put("rawAnalysis", aiAnalysis);
 
             return ResponseEntity.ok(response);
 
